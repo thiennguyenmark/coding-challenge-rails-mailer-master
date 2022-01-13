@@ -13,6 +13,8 @@
 class Traveler < ApplicationRecord
   attr_accessor :seeding
 
+  belongs_to :app_domain
+
   after_create :send_welcome_email, unless: :seeding
 
   private

@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_13_075400) do
+ActiveRecord::Schema.define(version: 2022_01_13_091558) do
+
+  create_table "app_domains", force: :cascade do |t|
+    t.string "name"
+    t.json "preferences"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "bookings", force: :cascade do |t|
     t.integer "zone_id", null: false
@@ -40,6 +48,8 @@ ActiveRecord::Schema.define(version: 2021_12_13_075400) do
     t.string "email", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "app_domain_id"
+    t.index ["app_domain_id"], name: "index_travelers_on_app_domain_id"
   end
 
   create_table "zones", force: :cascade do |t|
