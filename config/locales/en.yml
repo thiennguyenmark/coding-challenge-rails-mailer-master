@@ -2,8 +2,10 @@ en:
   user_mailer:
     bridj_welcome_email_subject: "Welcome to the Bridj family!"
     jbird_welcome_email_subject: "Welcome to the J-Bird family!"
-    booking_success_subject: "Booking Confirmation"
-    cancelled_booking_subject: "Booking Cancelled"
+    bridj_booking_success_subject: "Booking Confirmation"
+    jbird_booking_success_subject: "Ready to fly!"
+    bridj_cancelled_booking_subject: "Booking Cancelled"
+    jbird_cancelled_booking_subject: "Cancellation request received"
   time:
     formats:
       admin_input: "%d/%m/%Y %H:%M"

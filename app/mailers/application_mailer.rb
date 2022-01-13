@@ -7,6 +7,8 @@ class ApplicationMailer < MandrillMailer::TemplateMailer
     traveler = Traveler.find(traveler_id)
     booking = Booking.find(booking_id)
 
+    app_domain = traveler.app_domain
+
     origin = booking.pickup
     time_zone = booking.zone.time_zone
 
@@ -14,8 +16,8 @@ class ApplicationMailer < MandrillMailer::TemplateMailer
     travel_time = booking.pickup_scheduled_at.in_time_zone(time_zone)
 
     mandrill_mail(
-      template: 'admin-booking-success-au',
-      subject: I18n.t('user_mailer.booking_success_subject'),
+      template: app_domain.booking_success_email_subject_key,
+      subject: I18n.t("user_mailer.#{app_domain.booking_success_email_template_key}"),
       to: { email: traveler.email, name: traveler.first_name },
       vars: {
         'FNAME' => traveler.first_name,
@@ -72,8 +74,8 @@ class ApplicationMailer < MandrillMailer::TemplateMailer
     origin = booking.origin.name
 
     mandrill_mail(
-      template: 'admin-booking-cancel-au',
-      subject: I18n.t('user_mailer.cancelled_booking_subject'),
+      template: app_domain.booking_cancel_email_subject_key,
+      subject: I18n.t("user_mailer.#{app_domain.booking_cancel_email_template_key}"),
       to: { email: traveler.email, name: traveler.first_name },
       vars: {
         'FNAME' => traveler.first_name,
