@@ -1,6 +1,7 @@
 en:
   user_mailer:
-    send_welcome_email_subject: "Welcome to the Bridj family!"
+    bridj_welcome_email_subject: "Welcome to the Bridj family!"
+    jbird_welcome_email_subject: "Welcome to the J-Bird family!"
     booking_success_subject: "Booking Confirmation"
     cancelled_booking_subject: "Booking Cancelled"
   time:

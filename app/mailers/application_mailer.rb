@@ -50,10 +50,11 @@ class ApplicationMailer < MandrillMailer::TemplateMailer
 
   def send_welcome_email(traveler_id)
     user = Traveler.find(traveler_id)
+    app_domain = user.app_domain
 
     mandrill_mail(
-      template: 'admin-welcome-email-au',
-      subject: I18n.t('user_mailer.send_welcome_email_subject'),
+      template: app_domain.welcome_email_template_key,
+      subject: I18n.t("user_mailer.#{app_domain.welcome_email_subject_key}"),
       to: { email: user.email, name: user.first_name },
       vars: { 'FNAME' => user.first_name },
       inline_css: true
