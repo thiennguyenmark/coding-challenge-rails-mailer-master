@@ -4,11 +4,23 @@ describe ApplicationMailer, type: :mailer do
   let(:zone) { Zone.create! name: 'Test Zone', time_zone: 'Australia/Brisbane' }
   let(:utc_booking_time) { Time.parse('2021-01-23 00:00:00 UTC') }
   let(:utc_departure_time) { Time.parse('2021-01-28 04:30:00 UTC') }
+  let(:app_domain) do
+    AppDomain.create(
+      name: 'Bridj',
+      welcome_email_subject_key: 'bridj_welcome_email_subject',
+      welcome_email_template_key: 'admin-welcome-email-au',
+      booking_success_email_subject_key: 'bridj_booking_success_subject',
+      booking_success_email_template_key: 'admin-booking-success-au',
+      booking_cancel_email_subject_key: 'bridj_cancelled_booking_subject',
+      booking_cancel_email_template_key: 'admin-booking-cancel-au'
+    )
+  end
   let(:traveler) do
     Traveler.create! first_name: 'Donald',
                      last_name: 'Duck',
                      email: 'donald@disney.com',
-                     seeding: true
+                     seeding: true,
+                     app_domain: app_domain
   end
   let(:origin) do
     Location.create! zone_id: zone.id,
@@ -41,8 +53,8 @@ describe ApplicationMailer, type: :mailer do
       Timecop.freeze(utc_booking_time) do
         expect_any_instance_of(ApplicationMailer).to(
           receive(:mandrill_mail)
-            .with(template: 'admin-booking-success-au',
-                  subject: 'Booking Confirmation',
+            .with(template: app_domain.booking_success_email_template_key,
+                  subject: app_domain.booking_success_email_subject_key,
                   to: { email: traveler.email, name: traveler.first_name },
                   vars: {
                     'FNAME' => traveler.first_name,
@@ -95,8 +107,8 @@ describe ApplicationMailer, type: :mailer do
       Timecop.freeze(utc_booking_time) do
         expect_any_instance_of(ApplicationMailer).to(
           receive(:mandrill_mail)
-            .with(template: 'admin-booking-cancel-au',
-                  subject: 'Booking Cancelled',
+            .with(template: app_domain.booking_cancel_email_subject_key,
+                  subject: app_domain.booking_cancel_email_template_key,
                   to: { email: traveler.email, name: traveler.first_name },
                   vars: {
                     'FNAME' => traveler.first_name,
@@ -119,8 +131,8 @@ describe ApplicationMailer, type: :mailer do
     it 'sends a mandrill mail with the correct variables' do
       expect_any_instance_of(ApplicationMailer).to(
         receive(:mandrill_mail)
-          .with(template: 'admin-welcome-email-au',
-                subject: I18n.t('user_mailer.send_welcome_email_subject'),
+          .with(template: app_domain.welcome_email_subject_key],
+                subject: I18n.t("user_mailer.#{app_domain.welcome_email_template_key}"),
                 to: { email: traveler.email, name: traveler.first_name },
                 vars: { 'FNAME' => traveler.first_name },
                 inline_css: true)
