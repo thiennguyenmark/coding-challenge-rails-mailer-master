@@ -17,10 +17,22 @@ locations = [
   { name: '9 Granville Street, Hill End, West End', latitude: -27.483333195617643, longitude: 153.01108730491254 }
 ].map { |loc| Location.create! loc.merge(zone_id: zone.id) }
 
+AppDomain.create(
+  name: 'Bridj',
+  welcome_email_subject_key: 'bridj_welcome_email_subject',
+  welcome_email_template_key: 'admin-welcome-email-au',
+  booking_success_email_subject_key: 'bridj_booking_success_subject',
+  booking_success_email_template_key: 'admin-booking-success-au',
+  booking_cancel_email_subject_key: 'bridj_cancelled_booking_subject',
+  booking_cancel_email_template_key: 'admin-booking-cancel-au'
+)
+
 traveler = Traveler.create! first_name: 'Donald',
                             last_name: 'Duck',
                             email: 'donald@disney.com',
-                            seeding: true
+                            seeding: true,
+                            app_domain: AppDomain.find_by(name: 'Bridj')
+
 booking = Booking.create zone_id: zone.id,
                          traveler_id: traveler.id,
                          origin_id: locations[0].id,
